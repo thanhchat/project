@@ -1,0 +1,42 @@
+/* CSS Document */
+body{
+    background:url(../../../../public/templates/portal/image/bac_adm.jpg) repeat;
+}
+#clear{clear:both;}
+a { text-decoration:none; color:#999;}
+img { border:0px;}
+a:hover { text-decoration:underline; }
+.tb_login
+{
+    background-image:url(../../../../public/templates/portal/image/from_login.jpg);
+    width:393px;
+    height:268px;
+}
+#signin
+{
+    background-image:url(../../../../public/templates/portal/image/btn_login.jpg);
+    width:128px;
+    height:43px;
+    border:none;
+    cursor:pointer;
+}
+#email
+{
+    background-color:#f3f3f3;
+    border:solid 1px #FFF;
+    width:170px;
+    height:20px;
+}
+#password
+{
+    background-color:#f3f3f3;
+    border:solid 1px #FFF;
+    width:170px;
+    height:20px;
+}
+#loading_
+{
+    color:#F00;
+    font-size:14px;
+    text-align:center;
+}

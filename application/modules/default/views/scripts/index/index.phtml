@@ -1,0 +1,27 @@
+<div id="tbContent">
+    <table>
+        <thead>
+        <th>STT</th>
+        <th>Tên</th>
+        <th>Địa chỉ</th>
+        <th>City</th>
+        <th>State</th>
+        <th>Zip</th>
+        </thead>
+        <tbody>
+            <?php
+            foreach ($this->array as $value) {
+                ?>
+                <tr>
+                    <td><?= $value['id']; ?></td>
+                    <td><?= $value['name']; ?></td>
+                    <td><?= $value['address']; ?></td>
+                    <td><?= $value['city']; ?></td>
+                    <td><?= $value['state']; ?></td>
+                    <td><?= $value['zip']; ?></td>
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+</div>
+<div id="loading"> Đang tải dữ liệu...</div>
