@@ -10,63 +10,7 @@
         <link href="<?= $this->baseUrl(); ?>/public/templates/portal/css/styles.css" media="screen" rel="stylesheet" type="text/css" >
         <link href="<?= $this->baseUrl(); ?>/public/templates/portal/css/message.css" media="screen" rel="stylesheet" type="text/css" >
         <script type="text/javascript" src="<?= $this->baseUrl(); ?>/public/templates/portal/js/jquery.js"></script>
-        <script type="text/javascript" src="<?= $this->baseUrl(); ?>/public/templates/portal/js/menu.js"></script>
-
-        <style>
-            #container {
-                width: 100%;
-            }
-            #sidebar {
-                position: fixed;
-                left: 0;
-                top: 0;
-                bottom: 0;
-                z-index: 1;
-                border:1px solid #ededed;
-                width: 239px;
-            }
-            #content {
-                margin: 10px 0px 0px 240px;
-                position: relative;
-                border:1px solid #ededed;
-            }
-
-            #mess {
-                margin: 2px 0px 0px 240px;
-                position: relative;
-            }
-            #data{
-                position: relative;
-                overflow: hidden;
-                height: auto;
-            }
-            #top{
-                height: 44px;
-                position: fixed;
-                width: 100%;
-                min-width: 320px;
-                top: 0;
-                background-color: #fff;
-                left: 0;
-                z-index: 2;
-                background-color: #F5F5F5;
-                border-bottom: 3px solid #1D98BC;
-            }
-            #title{
-                text-align: center;
-                font-weight: bold;
-                font-size: 28px;
-                height:auto;
-                padding: 20px;
-                background-color: #22AED7;
-                color: #fff;
-                text-shadow: 0 5px 5px rgba(0, 0, 0, 0.5);
-            }
-            #menuItem{
-                margin-top:10px;
-            }
-
-        </style>      
+        <script type="text/javascript" src="<?= $this->baseUrl(); ?>/public/templates/portal/js/menu.js"></script>     
     </head>
     <body>
         <div id="container">
@@ -76,8 +20,8 @@
                     <div id='cssmenu'>
                         <div id="logout"><div id="textlo">
                                 <?php
-                                if (isset($this->userLogin)) {
-                                    echo "<a href='#'>" . $this->userLogin . "</a>";
+                                if (Zend_Auth::getInstance()->hasIdentity()) {
+                                    echo "<a href='#'>" . Zend_Auth::getInstance()->getIdentity()->EMAIL . "</a>";
                                 }
                                 ?></div><a href="<?= $this->baseUrl('/portal/auth/logout'); ?>" id="log" title="Đăng xuất"><div id="iconLogout"></div></div></a>
                         <ul>
@@ -94,7 +38,7 @@
                             </li>
                             <li class='last'><a href='#'><span>Hình ảnh</span></a></li>
                             <li class='last'><a href='#'><span>Danh mục menu</span></a></li>
-                            <li class='last'><a href='#'><span>Tài khoản</span></a></li>
+                            <li class='last'><a href='<?=$this->baseUrl();?>/portal/user/'><span>Tài khoản</span></a></li>
                         </ul>
                     </div>
                 </div>

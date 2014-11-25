@@ -63,3 +63,14 @@ $('#cssmenu li.has-sub>a').on('click', function(){
 	}
 });
 } )( jQuery );
+
+
+function CheckDel(msg){
+if(confirm(msg)){
+ return true;
+    }
+else
+ {
+ return false;
+ }
+}

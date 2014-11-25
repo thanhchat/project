@@ -23,7 +23,7 @@ class Portal_Form_LoginForm extends Zend_Form
         ));
         $this->setDecorators(array(
                           array('viewScript',
-                          array('viewScript'=>'LoginForm.phtml'),
+                          array('viewScript'=>'auth/LoginForm.phtml'),
         )));
         $email->removeDecorator('Errors');
         $password->removeDecorator('Errors');

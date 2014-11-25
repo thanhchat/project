@@ -3,11 +3,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/xampp/htdocs/mien_que/library/System/Message.php</file>
-            <file>file:/C:/xampp/htdocs/mien_que/application/modules/portal/views/scripts/LoginForm.phtml</file>
-            <file>file:/C:/xampp/htdocs/mien_que/application/modules/portal/controllers/IndexController.php</file>
-            <file>file:/C:/xampp/htdocs/mien_que/application/modules/portal/views/scripts/auth/login.phtml</file>
+            <file>file:/C:/xampp/htdocs/mien_que/public/templates/portal/css/styles.css</file>
+            <file>file:/C:/xampp/htdocs/mien_que/application/modules/portal/models/User.php</file>
+            <file>file:/C:/xampp/htdocs/mien_que/application/modules/portal/views/scripts/user/edit.phtml</file>
+            <file>file:/C:/xampp/htdocs/mien_que/application/modules/portal/views/scripts/user/index.phtml</file>
+            <file>file:/C:/xampp/htdocs/mien_que/index.php</file>
+            <file>file:/C:/xampp/htdocs/mien_que/application/modules/portal/controllers/UserController.php</file>
             <file>file:/C:/xampp/htdocs/mien_que/public/templates/portal/layout.phtml</file>
+            <file>file:/C:/xampp/htdocs/mien_que/application/modules/portal/views/scripts/user/add.phtml</file>
         </group>
     </open-files>
 </project-private>

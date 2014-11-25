@@ -1,0 +1,59 @@
+<form id="frmAddUser" action="<?= $this->baseUrl(); ?>/portal/user/add" method="post">
+    <div id="divBac" >
+        <table>
+            <tr>
+                <td>Email</td>
+                <td></td>
+                <td><input type="text" name="email" id="email" class="inputText" value="<?= ($this->email != "") ? $this->email : ""; ?>"/></td>
+            </tr>
+            <tr>
+                <td>Mật khẩu</td>
+                <td></td>
+                <td><input type="password" id="password" name="password"/></td>
+            </tr
+            <tr>
+                <td>Nhập lại mật khẩu</td>
+                <td></td>
+                <td><input type="password" id="re_password" name="re_password"/></td>
+            </tr>
+            <tr>
+                <td>Họ tên</td>
+                <td></td>
+                <td><input type="text" name="fullname" id="fullname" class="inputText" /></td>
+            </tr>
+            <tr>
+                <td>Số điện thoại</td>
+                <td></td>
+                <td><input type="text" name="phone" id="phone"/></td>
+            </tr>
+            <tr>
+                <td>Địa chỉ</td>
+                <td></td>
+                <td><input type="text" name="address" id="address" class="inputText"/></td>
+            </tr>
+            <tr>
+                <td>Active</td>
+                <td></td>
+                <td><input type="checkbox" id="active" name="active" <?= ($this->active) ? "checked" : ""; ?> /></td>
+            </tr>
+            <tr>
+                <td>Role</td>
+                <td></td>
+                <td>
+                    <select id="role" name="role">
+                        <option value="1">User</option>
+                        <option value="2">Admin</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td><input type="submit" id="btnSubmit" name="btnSubmit" value="Thêm mới" /> <input type="reset" id="btnReset" name="btnReset" value="Xóa" /></td>
+            </tr>
+        </table>
+    </div>
+</form>

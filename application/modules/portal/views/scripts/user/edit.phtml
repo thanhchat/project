@@ -1,0 +1,83 @@
+<form id="frmEditInfor" action="<?= $this->baseUrl(); ?>/portal/user/edit/id/<?=$this->id;?>/act/infor" method="post">
+    <fieldset style="border: solid 1px #D2D2D2">
+        <legend style="background-color: #D2D2D2;color: #1682ba;">Cập nhật thông tin</legend>
+        <div id="divBac" >
+            <table>
+                <tr>
+                    <td>Email</td>
+                    <td></td>
+                    <td><input type="text" disabled="true" name="email" id="email" class="inputText" value="<?= ($this->email != "") ? $this->email : ""; ?>"/></td>
+                </tr>
+                <tr>
+                    <td>Họ tên</td>
+                    <td></td>
+                    <td><input type="text" name="fullname" id="fullname" class="inputText" value="<?= ($this->fullname != "") ? $this->fullname : ""; ?>" /></td>
+                </tr>
+                <tr>
+                    <td>Số điện thoại</td>
+                    <td></td>
+                    <td><input type="text" name="phone" id="phone" value="<?= ($this->phone != "") ? $this->phone : ""; ?>"/></td>
+                </tr>
+                <tr>
+                    <td>Địa chỉ</td>
+                    <td></td>
+                    <td><input type="text" name="address" id="address" class="inputText" value="<?= ($this->address != "") ? $this->address : ""; ?>"/></td>
+                </tr>
+                <tr>
+                    <td>Active</td>
+                    <td></td>
+                    <td><input type="checkbox" id="active" name="active" <?= ($this->active) ? "checked" : ""; ?> /></td>
+                </tr>
+                <tr>
+                    <td>Role</td>
+                    <td></td>
+                    <td>
+                        <select id="role" name="role">
+                            <option value="1" <?php if(isset($this->role1))echo $this->role1;?>>User</option>
+                            <option value="2" <?php if(isset($this->role2))echo $this->role2;?>>Admin</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td><input type="submit" id="btnSubmit" name="btnSubmit" value="Cập nhật" /></td>
+
+                </tr>
+            </table>
+        </div>
+    </fieldset>
+</form>
+<br>
+<form id="frmEditPass" action="<?= $this->baseUrl(); ?>/portal/user/edit/id/<?=$this->id;?>/act/pass" method="post">
+    <fieldset style="border: solid 1px #D2D2D2">
+        <legend style="background-color: #D2D2D2;color: #1682ba;">Cập nhật mật khẩu</legend>
+        <div id="divBac">
+            <table>
+                <tr>
+                    <td>Mật khẩu cũ</td>
+                    <td></td>
+                    <td><input type="password" id="password_old" name="password_old"/></td>
+                </tr>
+                <tr>
+                    <td>Mật khẩu</td>
+                    <td></td>
+                    <td><input type="password" id="password" name="password"/></td>
+                </tr>
+                <tr>
+                    <td>Nhập lại mật khẩu</td>
+                    <td></td>
+                    <td><input type="password" id="re_password" name="re_password"/></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td><input type="submit" id="btnSubmitPass" name="btnSubmitPass" value="Cập nhật" /></td>
+                </tr>
+            </table>
+        </div>
+    </fieldset>
+</form>

@@ -56,13 +56,13 @@ class Portal_AuthController extends Zend_Controller_Action {
                     } else {
                         $this->view->errorMessage = '<div class="alert alert-error">
                         <a class="close" data-dismiss="alert" onclick="$(this).parent().slideUp();return false;">×</a>
-                        <strong>Error! </strong>Email hoặc mật khẩu không chính xác.
+                        Email hoặc mật khẩu không chính xác.
                       </div>';
                     }
                 } else {
                     $this->view->errorMessage = '<div class="alert alert-error">
                         <a class="close" data-dismiss="alert" onclick="$(this).parent().slideUp();return false;">×</a>
-                        <strong>Error! </strong>Email không đúng định dạng.
+                        Email không đúng định dạng.
                       </div>';
                 }
             }

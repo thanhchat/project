@@ -5,7 +5,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
+date_default_timezone_set('Asia/Ho_Chi_Minh');
 define('APPLICATION_PATH',realpath(dirname(__FILE__) . '/application')); 
 define('APPLICATION_ENV','production');
 define("PUBLIC_PATH" , realpath(dirname(__FILE__)) . "/public");
