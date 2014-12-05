@@ -1,0 +1,72 @@
+.progress { margin-left: 8px;position:relative; width:400px; border: 1px solid #ddd; padding: 1px; border-radius: 3px; }
+.bar {margin-left: 8px; background-color: #66CCCC; width:0%; height:20px; border-radius: 3px; }
+.percent {margin-left: 8px; position:absolute; display:inline-block; top:1px; color: #E6F7F7;}
+#add_more{margin-left: 8px;background-color: #22AED7; color: #FFF;padding: 5px;text-decoration: none; }
+.dv_add{margin-bottom: 8px;widows:200px;}
+.div_uploads{
+    width: 890px;
+    float: left;
+    padding: 2px;
+    margin: 2px;   
+    clear: both;
+}
+.inputTitle{
+    width: 565px;
+}
+#spn_inputs{
+    width: 880px;
+    margin: 5px 5px; background: #eee; border-radius: 10px; padding: 15px;
+}
+.chkAcive{
+    float: right;
+}
+
+.wrap{
+    width: 330px;
+    margin: 15px auto;
+    padding: 18px;
+    background: white;
+    border: 1px solid #DBDBDB;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    overflow: hidden;
+    text-align: center;
+}
+.status{
+    /*display: none;*/
+    padding: 5px;
+    margin: 10px 0;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+    color: #468847;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+input[type="submit"] {
+    cursor:pointer;
+    width:50%;
+    border:none;
+    background:#22AED7;
+    background-image:linear-gradient(bottom, #22AED7 0%, #22AED7 52%);
+    background-image:-moz-linear-gradient(bottom, #22AED7 0%, #22AED7 52%);
+    background-image:-webkit-linear-gradient(bottom, #22AED7 0%, #22AED7 52%);
+    color:#FFF;
+    font-weight: bold;
+    margin: 20px 0;
+    padding: 10px;
+    border-radius:5px;
+}
+input[type="submit"]:hover {
+    background-image:linear-gradient(bottom, #22AED7 0%, #189DE1 52%);
+    background-image:-moz-linear-gradient(bottom, #22AED7 0%, #189DE1 52%);
+    background-image:-webkit-linear-gradient(bottom, #22AED7 0%, #189DE1 52%);
+    -webkit-transition:background 0.3s ease-in-out;
+    -moz-transition:background 0.3s ease-in-out;
+    transition:background-color 0.3s ease-in-out;
+}
+input[type="submit"]:active {
+    box-shadow:inset 0 1px 3px rgba(0,0,0,0.5);
+}

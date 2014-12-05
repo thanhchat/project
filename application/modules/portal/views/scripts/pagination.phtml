@@ -1,0 +1,44 @@
+<?php if ($this->pageCount >= 2) { ?>
+    <div class="pagination" style="width:100%">
+        <div style="float:left;width:28%">
+        </div>
+        <div style="margin: 0 auto;text-align: center;">
+            <!-- First page link -->
+            <?php if (isset($this->previous)): ?>
+            <span class="pageactive"><a onclick="javascript:showMessage();" href="<?= $this->url(array('page' => $this->first)); ?>">Về đầu</a></span>
+            <?php else: ?>
+                <span class="disabled">Về đầu</span>
+            <?php endif; ?>
+
+            <!-- Previous page link -->
+
+            <?php if (isset($this->previous)): ?>
+            <span class="pageactive"><a onclick="javascript:showMessage();" href="<?= $this->url(array('page' => $this->previous)); ?>">Trước</a></span>
+            <?php else: ?>
+                <span class="disabled">Trước</span>
+            <?php endif; ?>
+            <!-- Numbered page links -->
+            <?php foreach ($this->pagesInRange as $page): ?>
+                <?php if ($page != $this->current): ?>
+            <span class="pageactive"><a onclick="javascript:showMessage();" href="<?= $this->url(array('page' => $page)); ?>"><?= $page; ?></a></span>
+                <?php else: ?>
+            <span class="page"><?= $page; ?></span>
+                <?php endif; ?>
+            <?php endforeach; ?>
+            <!-- Next page link -->
+            <?php if (isset($this->next)): ?>
+            <span class="pageactive"> <a onclick="javascript:showMessage();" href="<?= $this->url(array('page' => $this->next)); ?>">Tiếp theo</a></span>
+            <?php else: ?>
+            <span class="disabled">Tiếp theo</span>
+            <?php endif; ?>
+            <!-- Last page link -->
+            <?php if (isset($this->next)): ?>
+            <span class="pageactive"> <a onclick="javascript:showMessage();" href="<?= $this->url(array('page' => $this->last)); ?>">Về cuối</a></span>
+            <?php else: ?>
+                <span class="disabled">Về cuối</span>
+            <?php endif; ?>
+            &nbsp; Trang <?= $this->current; ?> / <?= $this->last; ?>
+        </div>
+    </div>
+<?php
+}?>

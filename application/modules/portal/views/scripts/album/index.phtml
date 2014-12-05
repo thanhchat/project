@@ -1,0 +1,72 @@
+<div id="search">
+    <a onclick="javascript:showMessage();" href="<?= $this->baseUrl(); ?>/portal/album/add">Thêm mới</a>
+</div>
+<table class="tableView" width="100%">
+    <thead>
+        <tr>
+            <th width="50">Mã</th>
+            <th>Tên album</th>
+            <th>Hình ảnh</th>
+            <th>Ngày tạo</th>
+            <th>Ngày cập nhật</th>
+            <th>Người tạo</th>
+            <th>Danh muc</th>
+            <th>Active</th>
+            <th>Lượt xem</th>
+            <th>Tags</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        if (count($this->dataPaginator) > 0) {
+            foreach ($this->dataPaginator as $key => $value) {
+                ?>
+                <tr>
+                    <td><?= $value['ALBUM_ID']; ?></td>
+                    <td><?= $value['ALBUM_TITLE']; ?></td>
+                    <td><img src="<?= $this->baseUrl(); ?>/public/images/<?= $value['ALBUM_FOLDER_NAME'] ?>/medium/<?= $value['MEDIUM_IMAGE_URL'] ?>" width="100" height="100" /></td>
+                    <td><?= date('d/m/Y H:i', strtotime($value['CREATED_DATE'])); ?></td>
+                    <td><?= $value['LAST_UPDATE']; ?></td>
+                    <td><?= $value['EMAIL']; ?></td>
+                    <td><?= $value['NAME']; ?></td>
+                    <td><?= $value['IS_ACTIVE'] == 1 ? "<span style='color:#1F9D51;'>Yes</span>" : "<span style='color:red;'>No</span>"; ?></td>
+                    <td><?= $value['VIEW']; ?></td>
+                    <td><?= $value['TAGS']; ?></td>
+                    <td><a onclick="javascript:showMessage();" href="<?=
+                        $this->url(array(
+                            'controller' => 'album',
+                            'action' => 'edit',
+                            'module' => 'portal',
+                            'id' => $value['ALBUM_ID']));
+                        ?>">Sửa</a>
+                        | <a onclick="javascript:showMessage();" href="<?=
+                        $this->url(array(
+                            'controller' => 'album',
+                            'action' => 'delete',
+                            'module' => 'portal',
+                            'id' => $value['ALBUM_ID']));
+                        ?>" onclick=" return CheckDel('Bạn có chắc muốn xóa?');">Xóa</a> | 
+                        
+                        <a onclick="javascript:showMessage();" href="<?=
+                        $this->url(array(
+                            'controller' => 'album',
+                            'action' => 'uploads',
+                            'module' => 'portal',
+                            'id' => $value['ALBUM_ID']));
+                        ?>">Upload</a>
+                    </td>
+                </tr>
+                <?php
+            }
+        }
+        ?>
+        <tr>
+            <td colspan="11" style="background-color: #DDD;">
+                <?php
+                echo $this->paginationControl($this->dataPaginator, 'Sliding', 'pagination.phtml');
+                ?>
+            </td>
+        </tr> 
+    </tbody>
+</table>

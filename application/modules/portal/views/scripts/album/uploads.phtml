@@ -1,0 +1,63 @@
+<script>
+    /* JS for Uploader */
+    $(function () {
+        /* Append More Input Files */
+        var i = 1;
+        $('#add_more').click(function () {
+            i++;
+            var name = "title" + i;
+            var chk = "chk" + i;
+            $('#spn_inputs').append('<div class="div_uploads"><input type="file" name="file_uploads_with_title[]" accept="image/*">\n\
+            <input placeholder="Nhập tiêu đề hình" class="inputTitle" type="text" id="' + name + '" name="' + name + '"/>\n\
+            <span style="font-weight: bold;color: red">Active</span><input class="chkAcive" type="checkbox" id="' + chk + '" name="' + chk + '" /></div>\n\
+            <div style="clear: both"></div>');
+        });
+    });
+</script>
+<form action="<?php if (isset($this->action)) echo $this->action; ?>" method="post" id='frm_upld' enctype="multipart/form-data">
+    <div style="padding: 5px;text-align: center;margin-bottom: 8px;">
+        <?php
+        if (isset($this->listAlbum) && count($this->listAlbum) > 0) {
+            ?>
+        <span style="font-weight: bold;">Chọn Album  </span><select id="listAlbumItem" name="listAlbumItem" style="padding: 2px;border: solid 1px #F1F1E3;border-radius: 4px;width: 300px;">
+                <option value="0">--Chọn album uploads--</option>
+                <?php
+                foreach ($this->listAlbum as $key => $value) {
+                    if (isset($this->id) && $this->id == $value['ALBUM_ID']) {
+                        ?>
+                        <option value="<?= $value['ALBUM_FOLDER_NAME']; ?>@@_<?= $value['ALBUM_ID']; ?>" selected="selected"><?= $value['ALBUM_TITLE']; ?></option>
+                    <?php } else { ?> 
+                        <option value="<?= $value['ALBUM_FOLDER_NAME']; ?>@@_<?= $value['ALBUM_ID']; ?>"><?= $value['ALBUM_TITLE']; ?></option>
+                    <?php } ?>
+                <?php } ?>
+            </select>
+        <?php } ?>
+    </div>
+    <fieldset  style="border: solid 1px #F1F1E3;padding: 8px;width: 920px;float: left;">
+        <legend style="color: #292;font-weight: bold;padding: 10px;font-size: 14px;width: 220px;text-align: center">Upload hình có tiêu đề</legend>
+        <div class="dv_add"><a href="javascript:void(0);" id="add_more">Thêm file</a></div>
+        <div class="progress">
+            <div class="bar"></div >
+            <div class="percent">0%</div >
+        </div>    
+        <div id="status"></div>
+
+        <div id='spn_inputs'>
+            <div class="div_uploads">
+                <input type="file" name="file_uploads_with_title[]" accept="image/*">
+                <input placeholder="Nhập tiêu đề hình" class="inputTitle" type="text" name="title1" id="title1"/>
+                <span style="font-weight: bold;color: red">Active</span> <input class="chkAcive" type="checkbox" name="chk1" id="chk1"/></div>
+            <div style="clear: both"></div>
+        </div>
+        <div style="clear: both;padding:5px;"><input id="add_more" onclick="javascript:showMessage();" type="submit" value="Upload File(s)"></div> 
+    </fieldset>
+    <fieldset style="border: solid 1px #F1F1E3;padding: 8px;width: 370px;margin-left: 5px;float: left;">
+        <legend style="color: #292;font-weight: bold;padding: 10px;font-size: 14px;width: 250px;text-align: center">Nhiều hình cùng lúc, không tiêu đề</legend>
+        <div class="wrap">
+            <p style="color: #00c;font-style: italic;">Tối đa 1M. Định dạng file: jpg, jpeg, png, gif</p>
+            <input type="file" name="file_uploads_not_title[]" id="up1" multiple="multiple" accept="image/*">
+            <input onclick="javascript:showMessage();" type="submit" name="up_not_title" id="up_not_title" value="Upload">
+
+        </div>
+    </fieldset> 
+</form>

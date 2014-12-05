@@ -1,0 +1,93 @@
+<form id="frmEditAlbum" action="<?php if (isset($this->action)) echo $this->action; ?>" method="post" enctype="multipart/form-data">
+    <div id="divBac" >
+        <table>
+            <tr>
+                <td>Tên Album</td>
+                <td></td>
+                <td><input type="text" class="text" name="album_name" id="album_name" value="<?= ($this->album_name != "") ? $this->album_name : ""; ?>"/></td>
+            </tr>
+            <tr>
+                <td>Mô tả</td>
+                <td></td>
+                <td><input type="text" class="text" name="description" id="description" value="<?= ($this->description != "") ? $this->description : ""; ?>"/></td>
+            </tr>
+            <tr>
+                <td>Mô tả chi tiết</td>
+                <td></td>
+                <td>
+                    <textarea id="contentDes" name="contentDes"><?= $this->contentDes; ?></textarea>
+                    <script type="text/javascript">
+                        CKEDITOR.replace('contentDes');
+                        CKEDITOR.config.width = 850;
+                        CKEDITOR.config.height = 200;
+
+                    </script>
+                </td>
+            </tr>
+            <tr>
+                <td>Thư mục hình</td>
+                <td></td>
+                <td><input disabled="disabled" type="text" name="image_folder" id="image_folder" value="<?= ($this->image_folder != "") ? $this->image_folder : ""; ?>"/></td>
+            </tr>
+            <tr>
+                <td>Hình ảnh</td>
+                <td></td>
+                <td>
+                    <div><img src="<?= $this->baseUrl(); ?>/public/images/<?= $this->image_folder; ?>/medium/<?= $this->imageView ?>" width="100" height="100" /></div><p></p>
+                    <input type="file" name="image" id="image" accept="image/*" />
+                </td>
+            </tr>
+            <tr>
+                <td>Active</td>
+                <td></td>
+                <td><input type="checkbox" id="active" name="active" <?= ($this->active == 1) ? "checked" : ""; ?> /></td>
+            </tr>
+            <tr>
+                <td>Tags</td>
+                <td></td>
+                <td><input class="text" type="text" name="tags" id="tags" value="<?= ($this->tags != "") ? $this->tags : ""; ?>"/></td>
+            </tr>
+            <tr>
+                <td>Nguồn</td>
+                <td></td>
+                <td><input class="text" type="text" name="sources" id="sources" value="<?= ($this->sources != "") ? $this->sources : ""; ?>"/></td>
+            </tr>
+            <tr>
+                <td>Danh mục</td>
+                <td></td>
+                <td>
+                    <?php
+                    if (isset($this->listMenuItems) && count($this->listMenuItems) > 0) {
+                        ?>
+                        <select id="listMenuItem" name="listMenuItem">
+                            <option value="0">--Danh mục gốc--</option>
+                            <?php
+                            foreach ($this->listMenuItems as $key => $value) {
+                                if (isset($this->menuItemId) && $this->menuItemId == $value['MENU_ID']) {
+                                    ?>
+                                    <option value="<?= $value['MENU_ID']; ?>" selected="selected"><?= $value['NAME']; ?></option>
+                                <?php } else { ?> 
+                                    <option value="<?= $value['MENU_ID']; ?>"><?= $value['NAME']; ?></option>
+                                <?php } ?>
+                            <?php } ?>
+                        </select>
+                    <?php } ?>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3"></td>
+            </tr>
+            <tr>
+                <td colspan="3"></td>
+            </tr>
+            <tr>
+                <td colspan="3"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td><input onclick="javascript:showMessage();" type="submit" id="btnSubmit" name="btnSubmit" value="Cập nhật" /></td>
+            </tr>
+        </table>
+    </div>
+</form>

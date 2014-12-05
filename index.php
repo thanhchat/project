@@ -6,6 +6,7 @@
  * and open the template in the editor.
  */
 date_default_timezone_set('Asia/Ho_Chi_Minh');
+define('FILE_MAX',1024*1024);
 define('APPLICATION_PATH',realpath(dirname(__FILE__) . '/application')); 
 define('APPLICATION_ENV','production');
 define("PUBLIC_PATH" , realpath(dirname(__FILE__)) . "/public");

@@ -18,6 +18,7 @@ class System_AuthLogin extends Zend_Controller_Plugin_Abstract{
                     $request->setControllerName('auth');
                     $request->setActionName('login');
                 }else{//cap nhat thoi gian hieu luc cua phien dang nhap
+                    
                     $authns = new Zend_Session_Namespace($auth->getStorage()->getNamespace());
                     $authns->setExpirationSeconds(60 * 30);// expire auth storage after 30 min 
                 }

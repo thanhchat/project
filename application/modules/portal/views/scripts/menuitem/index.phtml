@@ -1,0 +1,86 @@
+<table class="tableView" width="100%">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Tên danh mục</th>
+            <th>URL</th>
+            <th>Số thứ tự</th>
+            <th>Active</th>
+            <th>Parent</th>
+            <th>LEVEL</th>
+            <th colspan="2"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        if (isset($this->dataPaginator) && count($this->dataPaginator) > 0) {
+            foreach ($this->dataPaginator as $key => $value) {
+                ?>
+                <tr>
+                    <td><?= $value['MENU_ID']; ?></td>
+                    <td><?= $value['NAME']; ?></td>
+                    <td><?= $value['URL']; ?></td>
+                    <td><?= $value['ORDERING']; ?></td>
+                    <td><?= $value['ENABLED'] == 1 ? "<span style='color:#1F9D51;'>Yes</span>" : "<span style='color:red;'>No</span>"; ?></td>
+                    <td><?= $value['PARENTS']; ?></td>
+                    <td><?= $value['LEVEL']; ?></td>
+                    <td colspan="2"><a href="<?= $this->baseUrl(); ?>/portal/menuitem/index/id/<?= $value['MENU_ID']; ?>/act/get_infor_edit">Sửa</a>
+                        | <a href="<?= $this->baseUrl(); ?>/portal/menuitem/index/id/<?= $value['MENU_ID']; ?>/act/delete" onclick="javascript:showMessage(); return  CheckDel('Bạn có chắc muốn xóa?(Danh mục con sẽ bị xóa theo!)');">Xóa</a></td>
+                </tr>
+                <?php
+            }
+        } else {
+            ?>
+            <tr>
+                <td colspan="8">Không có thông tin danh mục.</td>
+            </tr>   
+        <?php } ?>
+    <form id="frmInforMenuItem" action="<?php if (isset($this->action)) echo $this->action; ?>" method="post">
+        <tr style="background-color: #F5F5F5;">
+            <td></td>
+            <td><input type="text" value="<?= ($this->name != "") ? $this->name : ""; ?>" name="menuName" id="menuName" style="width: 200px;" /></td>
+            <td><input type="text" name="url" id="url" value="<?= ($this->url != "") ? $this->url : ""; ?>" style="width: 200px;" /></td>
+            <td><input type="text" name="order" id="order" value="<?= ($this->order != "") ? $this->order : ""; ?>" style="width: 50px;" /></td>
+            <td><input type="checkbox" name="active" id="acive" <?= ($this->active) ? "checked" : ""; ?> /></td>
+            <td><input type="text" disabled="true" name="parent" id="parent" value="<?= ($this->parent != "") ? $this->parent : ""; ?>" style="width: 50px;" /></td>
+            <td><input type="text" name="level" id="level" value="<?= ($this->level != "") ? $this->level : ""; ?>" style="width: 50px;" /></td>
+            <td>
+
+                <?php
+                if (isset($this->listMenuItems) && count($this->listMenuItems) > 0) {
+                    ?>
+                    Thuộc danh mục : <select id="listMenuItem" name="listMenuItem">
+                        <option value="0">--Danh mục gốc--</option>
+                        <?php
+                        foreach ($this->listMenuItems as $key => $value) {
+                            if (isset($this->id) && $this->id == $value['MENU_ID']) {
+                                ?>
+                                <option value="<?= $value['MENU_ID']; ?>" selected="selected"><?= $value['NAME']; ?></option>
+                            <?php } else { ?> 
+                                <option value="<?= $value['MENU_ID']; ?>"><?= $value['NAME']; ?></option>
+                            <?php } ?>
+                        <?php } ?>
+                    </select>
+                <?php } ?>
+            </td>
+            <td>
+                <?php
+                if (isset($this->act) && $this->act != "") {
+                    ?>
+                    <input type="submit" onclick="javascript:showMessage();" id="btnSubmit" name="btnSubmit" value="Cập nhật" />
+                <?php } else { ?>
+                    <input type="submit" onclick="javascript:showMessage();" id="btnSubmit" name="btnSubmit" value="Thêm mới" /> 
+                <?php } ?>
+                <input type="reset" id="btnReset" name="btnReset" value="Xóa" />
+            </td>
+        </tr>
+    </form>
+    <tr>
+        <td colspan="11" style="background-color: #DDD;">
+            <?php
+            echo $this->paginationControl($this->dataPaginator, 'Sliding', 'pagination.phtml');
+            ?>
+        </td>
+    </tr>    
+</tbody>
+</table>

@@ -40,7 +40,7 @@
             <tr>
                 <td></td>
                 <td></td>
-                <td><input type="submit" id="btnSearch" name="btnSearch" value="Tìm kiếm"/></td>
+                <td><input type="submit" onclick="javascript:showMessage();" id="btnSearch" name="btnSearch" value="Tìm kiếm"/></td>
             </tr>
         </table>
     </form>
@@ -55,7 +55,6 @@
             <th>Số điện thoại</th>
             <th>Địa chỉ</th>
             <th>Ngày tạo</th>
-            <th>Ngày cập nhật</th>
             <th>Người tạo</th>
             <th>Active</th>
             <th>Role</th>
@@ -74,10 +73,9 @@
                     <td><?= $value['PHONE']; ?></td>
                     <td><?= $value['ADDRESS']; ?></td>
                     <td><?= date('d/m/Y H:i:s', strtotime($value['CREATED_DATE'])); ?></td>
-                    <td><?= date('d/m/Y H:i:s', strtotime($value['LAST_UPDATED'])); ?></td>
                     <td><?= $value['CREATED_BY_USER_LOGIN']; ?></td>
-                    <td><a href="<?= $this->url(array('controller' => 'user', 'action' => 'active', 'module' => 'portal', 'id' => $value['USER_LOGIN_ID'],'value'=>$value['ENABLED'] == "Y" ? "N" : "Y")); ?>" onclick=" return CheckDel('Bạn có chắc muốn thực hiện?');"><?= $value['ENABLED'] == "Y" ? "Yes" : "No"; ?></a></td>
-                    <td><?=($value['USER_ROLE']==2)?"Admin":"User"; ?></td>
+                    <td><a href="<?= $this->url(array('controller' => 'user', 'action' => 'active', 'module' => 'portal', 'id' => $value['USER_LOGIN_ID'], 'value' => $value['ENABLED'] == "Y" ? "N" : "Y")); ?>" onclick=" return CheckDel('Bạn có chắc muốn thực hiện?');"><?= $value['ENABLED'] == "Y" ? "<span style='color:#1F9D51;'>Yes</span>" : "<span style='color:red;'>No</span>"; ?></a></td>
+                    <td><?= ($value['USER_ROLE'] == 2) ? "Admin" : "User"; ?></td>
                     <td><a href="<?= $this->url(array('controller' => 'user', 'action' => 'edit', 'module' => 'portal', 'id' => $value['USER_LOGIN_ID'])); ?>">Sửa</a>
                         | <a href="<?= $this->url(array('controller' => 'user', 'action' => 'delete', 'module' => 'portal', 'id' => $value['USER_LOGIN_ID'])); ?>" onclick=" return CheckDel('Bạn có chắc muốn xóa?');">Xóa</a> </td>
                 </tr>
@@ -92,7 +90,7 @@
         <tr>
             <td colspan="11" style="background-color: #DDD;">
                 <?php
-                echo $this->paginationControl($this->dataPaginator, 'Sliding', 'user/pagination.phtml');
+                echo $this->paginationControl($this->dataPaginator, 'Sliding', 'pagination.phtml');
                 ?>
             </td>
         </tr>      

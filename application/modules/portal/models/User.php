@@ -27,45 +27,58 @@ class Portal_Model_User extends Zend_Db_Table_Abstract {
         $sql = $this->select()->from('user_login', array('USER_LOGIN_ID', 'EMAIL', 'FULLNAME', 'PHONE', 'ADDRESS', 'LAST_UPDATED', 'CREATED_BY_USER_LOGIN', 'CREATED_DATE', 'ENABLED', 'USER_ROLE')); //("SELECT * FROM user_login WHERE ENABLED = 'Y' ORDER BY USER_LOGIN_ID DESC");
         return $sql;
     }
-    public function searchUser($userLoginId,$name,$email,$phone,$active){
-        $flag=false;  
+
+    public function searchUser($userLoginId, $name, $email, $phone, $active) {
+        $flag = false;
         $sql = $this->select()->from('user_login', array('USER_LOGIN_ID', 'EMAIL', 'FULLNAME', 'PHONE', 'ADDRESS', 'LAST_UPDATED', 'CREATED_BY_USER_LOGIN', 'CREATED_DATE', 'ENABLED', 'USER_ROLE'));
-        if($userLoginId!=""){
-            $sql->where("USER_LOGIN_ID = ?",$userLoginId);
-            $flag=true;
+        if ($userLoginId != "") {
+            $sql->where("USER_LOGIN_ID = ?", $userLoginId);
+            $flag = true;
         }
-        if($name!=""&&  strlen($name)>0){
-            $sql->where('FULLNAME like ?',"%".trim($name)."%");
+        if ($name != "" && strlen($name) > 0) {
+            $sql->where('FULLNAME like ?', "%" . trim($name) . "%");
         }
-        if($email!=""&&  strlen($email)>0){
-            $sql->where("EMAIL=?",$email);
+        if ($email != "" && strlen($email) > 0) {
+            $sql->where("EMAIL=?", $email);
         }
-        if(is_numeric($phone)&&$phone!=""&&  strlen($phone)>0){
-            $sql->where("PHONE=?",$phone);
+        if (is_numeric($phone) && $phone != "" && strlen($phone) > 0) {
+            $sql->where("PHONE=?", $phone);
         }
-        if($active!=""&&strlen($active)>0){
-            $sql->where("ENABLED=?",$active);
+        if ($active != "" && strlen($active) > 0) {
+            $sql->where("ENABLED=?", $active);
         }
         return $sql;
     }
-    
-    public function deleteUser($id){
-        $sql="delete from user_login where USER_LOGIN_ID=$id";
+
+    public function deleteUser($id) {
+        $sql = "delete from user_login where USER_LOGIN_ID=$id";
         $this->db->query($sql);
     }
-    public function updateStatus($id,$value){
-        $sql="update user_login set ENABLED='".$value."' where USER_LOGIN_ID=$id";
+
+    public function updateStatus($id, $value) {
+        $sql = "update user_login set ENABLED='" . $value . "' where USER_LOGIN_ID=$id";
         $this->db->query($sql);
     }
-    public function addUser($data){
+
+    public function addUser($data) {
         $this->insert($data);
     }
-    public function getUserById($id){
-        $sql="select * from user_login where USER_LOGIN_ID=$id";
+
+    public function getUserById($id) {
+        $sql = "select * from user_login where USER_LOGIN_ID=$id";
         return $this->db->query($sql)->fetchAll();
-        
     }
-    public function updateInfor($data,$where){
+    public function getUserByEmail($email) {
+        $sql = "select * from user_login where EMAIL='".$email."'";
+        return $this->db->query($sql)->fetchAll();
+    }
+
+    public function updateInfor($data, $where) {
         $this->update($data, $where);
     }
+
+    public function updatePass($data, $where) {
+        $this->update($data, $where);
+    }
+
 }

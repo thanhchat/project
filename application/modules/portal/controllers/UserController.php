@@ -23,7 +23,7 @@ class Portal_UserController extends System_Controller_Action {
         if ($this->_request->isPost()) {
             $userId = $this->_request->getPost('user_id');
             $this->view->userId = $userId;
-            $name = $this->_request->getPost('fullname');
+            $name = $this->_request->getPost('fullName');
             $this->view->name = $name;
             $email = $this->_request->getPost('email');
             $this->view->email = $email;
@@ -65,19 +65,50 @@ class Portal_UserController extends System_Controller_Action {
         }
         if ($this->_request->isPost()) {
             $id = $this->_request->getParam('id');
+            $act = $this->_request->getParam('act');
             $this->view->id = $id;
-            $fullname = $this->_request->getPost('fullname');
-            $email = $this->_request->getPost('email');
-            $phone = $this->_request->getPost('phone');
-            $address = $this->_request->getPost('address');
-            $active = $this->_request->getPost('active');
-            $role = $this->_request->getPost('role');
-            $active = ($active) ? "Y" : "N";
-            $objUser = new Portal_Model_User;
-            $timestamp = date("Y-m-d H:i:s");
-            $data = array('PHONE' => $phone, 'ADDRESS' => $address, 'ENABLED' => $active, 'USER_ROLE' => $role, 'LAST_UPDATED' => $timestamp, 'FULLNAME' => $fullname);
-            $objUser->updateInfor($data, "USER_LOGIN_ID=".$id);
-            $this->_redirect("/portal/user/");
+            if ($act == "infor") {
+                $fullname = $this->_request->getPost('fullname');
+                $email = $this->_request->getPost('email');
+                $phone = $this->_request->getPost('phone');
+                $address = $this->_request->getPost('address');
+                $active = $this->_request->getPost('active');
+                $role = $this->_request->getPost('role');
+                $active = ($active) ? "Y" : "N";
+                $objUser = new Portal_Model_User;
+                $timestamp = date("Y-m-d H:i:s");
+                $data = array('PHONE' => $phone, 'ADDRESS' => $address, 'ENABLED' => $active, 'USER_ROLE' => $role, 'LAST_UPDATED' => $timestamp, 'FULLNAME' => $fullname);
+                $objUser->updateInfor($data, "USER_LOGIN_ID=" . $id);
+                $this->view->successMessage = "Cập nhật thông tin thành công.";
+                //$this->_redirect("/portal/user/");
+            }
+            if ($act == "pass") {
+                $empty = new Zend_Validate_NotEmpty();
+                $pass_old = $this->_request->getPost('password_old');
+                $pass = $this->_request->getPost('password');
+                $re_pass = $this->_request->getPost('re_password');
+                if ($empty->isValid($pass_old)) {
+                    if ($user[0]['PASSWORD'] == md5($pass_old)) {
+                        if ($empty->isValid($pass) && $empty->isValid($re_pass)) {
+                            if ($pass != $re_pass) {
+                                $this->view->errorMessage = "Mật khẩu không khớp";
+                            } else {
+                                $objUser = new Portal_Model_User;
+                                $dataPass = array('PASSWORD' => md5($pass));
+                                $objUser->updatePass($dataPass, "USER_LOGIN_ID=" . $id);
+                                $this->view->successMessage = "Cập nhật mật khẩu thành công.";
+                                //$this->_redirect("/portal/user/");
+                            }
+                        } else {
+                            $this->view->errorMessage = "Mật khẩu mới không được để trống";
+                        }
+                    } else {
+                        $this->view->errorMessage = "Mật khẩu cũ không chính xác";
+                    }
+                } else {
+                    $this->view->errorMessage = "Mật khẩu cũ không được để trống";
+                }
+            }
         }
         //$this->getHelper("viewRenderer")->setNoRender();
     }
@@ -86,41 +117,57 @@ class Portal_UserController extends System_Controller_Action {
         $this->view->headTitle('Thêm tài khoản.');
         if ($this->_request->isPost()) {
             $fullname = $this->_request->getPost('fullname');
+            $this->view->fullname = $fullname;
             $email = $this->_request->getPost('email');
             $this->view->email = $email;
             $phone = $this->_request->getPost('phone');
+            $this->view->phone = $phone;
             $address = $this->_request->getPost('address');
+            $this->view->address = $address;
             $pass = $this->_request->getPost('password');
             $re_pass = $this->_request->getPost('re_password');
             $active = $this->_request->getPost('active');
             $role = $this->_request->getPost('role');
             $active = ($active) ? "Y" : "N";
+            $this->view->active = ( $active) ? TRUE : FALSE;
+            if ($role == "1")
+                $this->view->role1 = "selected";
+            else
+                $this->view->role2 = "selected";
             $empty = new Zend_Validate_NotEmpty();
             if ($empty->isValid($email)) {
                 $val = new Zend_Validate_EmailAddress();
                 if ($val->isValid($email)) {
-                    if ($empty->isValid($pass) && $empty->isValid($re_pass)) {
-                        if ($pass != $re_pass) {
-                            $this->view->errorMessage = "Mật khẩu không khớp";
+                    $user = new Portal_Model_User;
+                    $checkEmail = $user->getUserByEmail($email);
+                    if (count($checkEmail) == 0) {
+                        if ($empty->isValid($pass) && $empty->isValid($re_pass)) {
+                            if ($pass != $re_pass) {
+                                $this->view->errorMessage = "Mật khẩu không khớp";
+                            } else {
+                                $userSession = Zend_Auth::getInstance();
+                                $idUser = $userSession->getIdentity()->USER_LOGIN_ID;
+                                $data = array('EMAIL' => $email, 'PASSWORD' => md5($pass), 'PHONE' => $phone, 'ADDRESS' => $address, 'ENABLED' => $active, 'USER_ROLE' => $role, 'CREATED_BY_USER_LOGIN' => $idUser, 'FULLNAME' => $fullname);
+                                $user->addUser($data);
+                                $this->view->successMessage = "Thêm thành viên thành công.";
+                                $fullname = "";
+                                $email = "";
+                                $phone = "";
+                                $pass = "";
+                                $re_pass = "";
+                                $address = "";
+                                $active = FALSE;
+                                $this->view->email = "";
+                                $this->view->active = $active;
+                                $this->view->fullname = "";
+                                $this->view->phone = "";
+                                $this->view->address = "";
+                            }
                         } else {
-                            $userSession = Zend_Auth::getInstance();
-                            $idUser = $userSession->getIdentity()->USER_LOGIN_ID;
-                            $data = array('EMAIL' => $email, 'PASSWORD' => md5($pass), 'PHONE' => $phone, 'ADDRESS' => $address, 'ENABLED' => $active, 'USER_ROLE' => $role, 'CREATED_BY_USER_LOGIN' => $idUser, 'FULLNAME' => $fullname);
-                            $user = new Portal_Model_User;
-                            $user->addUser($data);
-                            $this->view->successMessage = "Thêm thành viên thành công.";
-                            $fullname = "";
-                            $email = "";
-                            $phone = "";
-                            $pass = "";
-                            $re_pass = "";
-                            $address = "";
-                            $active = FALSE;
-                            $this->view->email = "";
-                            $this->view->active = $active;
+                            $this->view->errorMessage = "Mật khẩu không được để trống";
                         }
                     } else {
-                        $this->view->errorMessage = "Mật khẩu không được để trống";
+                        $this->view->errorMessage = "Tài khoản này đã tồn tại";
                     }
                 } else {
                     $this->view->errorMessage = "Email không đúng định dạng";

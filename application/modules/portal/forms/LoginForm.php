@@ -21,6 +21,7 @@ class Portal_Form_LoginForm extends Zend_Form
             $password,
             $signin,
         ));
+        
         $this->setDecorators(array(
                           array('viewScript',
                           array('viewScript'=>'auth/LoginForm.phtml'),

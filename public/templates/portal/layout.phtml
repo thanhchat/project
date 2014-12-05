@@ -3,14 +3,34 @@
     <head> 
         <meta http-equiv="Content-Language" content="VN" />
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <link rel="shortcut icon" href="<?= $this->baseUrl(); ?>/public/images/favicon.ico" type="image/x-icon">
         <?php echo $this->headTitle() ?>   
         <?php echo $this->headMeta() ?>        
         <?php echo $this->headLink() ?>   
         <?php echo $this->headScript() ?>
         <link href="<?= $this->baseUrl(); ?>/public/templates/portal/css/styles.css" media="screen" rel="stylesheet" type="text/css" >
         <link href="<?= $this->baseUrl(); ?>/public/templates/portal/css/message.css" media="screen" rel="stylesheet" type="text/css" >
-        <script type="text/javascript" src="<?= $this->baseUrl(); ?>/public/templates/portal/js/jquery.js"></script>
-        <script type="text/javascript" src="<?= $this->baseUrl(); ?>/public/templates/portal/js/menu.js"></script>     
+        <script type="text/javascript" src="<?= $this->baseUrl(); ?>/public/templates/portal/js/jquery.min.js"></script>
+        <script type="text/javascript" src="<?= $this->baseUrl(); ?>/public/templates/portal/js/menu.js"></script>
+        <script type="text/javascript" src="<?= $this->baseUrl(); ?>/public/templates/portal/js/blockUI.js"></script>
+        <script type="text/javascript">
+            function showMessage() {
+                $.blockUI({
+                    message: '<h3><img src="<?= $this->baseUrl(); ?>/public/templates/portal/image/loading.gif" /></h3>',
+                    overlayCSS: {backgroundColor: '#000', opacity: 0.2},
+                    css: {
+                        margin: 0,
+                        width: 'auto',
+                        top: '50%',
+                        padding: '6px',
+                        '-webkit-border-radius': '1px',
+                        '-moz-border-radius': '1px',
+                        opacity: 0.8,
+                        color: 'black'
+                    }});
+                setTimeout($.unblockUI, 2000);
+            }
+        </script>
     </head>
     <body>
         <div id="container">
@@ -23,12 +43,12 @@
                                 if (Zend_Auth::getInstance()->hasIdentity()) {
                                     echo "<a href='#'>" . Zend_Auth::getInstance()->getIdentity()->EMAIL . "</a>";
                                 }
-                                ?></div><a href="<?= $this->baseUrl('/portal/auth/logout'); ?>" id="log" title="Đăng xuất"><div id="iconLogout"></div></div></a>
+                                ?></div><a onclick="javascript:showMessage();" href="<?= $this->baseUrl('/portal/auth/logout'); ?>" id="log" title="Đăng xuất"><div id="iconLogout"></div></div></a>
                         <ul>
                             <li class='active has-sub'><a href='#'><span>Tin tức</span></a>
                                 <ul>
-                                    <li><a href='#'><span>Danh sách tin</span></a></li>
-                                    <li><a href='#'><span>Thêm tin</span></a>
+                                    <li><a onclick="javascript:showMessage();" href='#'><span>Danh sách tin</span></a></li>
+                                    <li><a onclick="javascript:showMessage();" href='#'><span>Thêm tin</span></a>
                                         <!--                                        <ul>
                                                                                     <li><a href='#'><span>Sub Product</span></a></li>
                                                                                     <li class='last'><a href='#'><span>Sub Product</span></a></li>
@@ -36,30 +56,32 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li class='last'><a href='#'><span>Hình ảnh</span></a></li>
-                            <li class='last'><a href='#'><span>Danh mục menu</span></a></li>
-                            <li class='last'><a href='<?=$this->baseUrl();?>/portal/user/'><span>Tài khoản</span></a></li>
+                            <li><a onclick="javascript:showMessage();" href='<?= $this->baseUrl() ?>/portal/album/'><span>Hình ảnh</span></a></li>
+                            <li><a onclick="javascript:showMessage();" href='<?= $this->baseUrl(); ?>/portal/menuitem/'><span>Danh mục menu</span></a></li>
+                            <li><a onclick="javascript:showMessage();" href='<?= $this->baseUrl(); ?>/portal/user/'><span>Tài khoản</span></a></li>
                         </ul>
                     </div>
                 </div>
             </div>
             <div id="mess">
                 <?php
-                   if(isset($this->successMessage)) {
-                ?>
-                <div class="alert alert-success">
-                    <a class="close" data-dismiss="alert" onclick="$(this).parent().slideUp();return false;">×</a>
-                    <strong><?=$this->successMessage;?></strong>
-                </div>
-                   <?php }?>
+                if (isset($this->successMessage) && $this->successMessage != "") {
+                    ?>
+                    <div class="alert alert-success">
+                        <a class="close" data-dismiss="alert" onclick="$(this).parent().slideUp();
+                                    return false;">×</a>
+                        <strong><?= $this->successMessage; ?></strong>
+                    </div>
+                <?php } ?>
                 <?php
-                   if(isset($this->errorMessage)) {
-                ?>
-                <div class="alert alert-error">
-                    <a class="close" data-dismiss="alert" onclick="$(this).parent().slideUp();return false;">×</a>
-                    <strong><?=$this->errorMessage;?></strong>
-                </div>
-                <?php }?>
+                if (isset($this->errorMessage) && $this->errorMessage != "") {
+                    ?>
+                    <div class="alert alert-error">
+                        <a class="close" data-dismiss="alert" onclick="$(this).parent().slideUp();
+                                    return false;">×</a>
+                        <strong><?= $this->errorMessage; ?></strong>
+                    </div>
+                <?php } ?>
             </div>
             <div id="content">
                 <div id="data">

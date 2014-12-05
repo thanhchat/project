@@ -19,17 +19,17 @@
             <tr>
                 <td>Họ tên</td>
                 <td></td>
-                <td><input type="text" name="fullname" id="fullname" class="inputText" /></td>
+                <td><input type="text" name="fullname" id="fullname" class="inputText" value="<?= ($this->fullname != "") ? $this->fullname : ""; ?>" /></td>
             </tr>
             <tr>
                 <td>Số điện thoại</td>
                 <td></td>
-                <td><input type="text" name="phone" id="phone"/></td>
+                <td><input type="text" name="phone" id="phone" value="<?= ($this->phone != "") ? $this->phone : ""; ?>"/></td>
             </tr>
             <tr>
                 <td>Địa chỉ</td>
                 <td></td>
-                <td><input type="text" name="address" id="address" class="inputText"/></td>
+                <td><input type="text" name="address" id="address" class="inputText" value="<?= ($this->address != "") ? $this->address : ""; ?>"/></td>
             </tr>
             <tr>
                 <td>Active</td>
@@ -40,10 +40,10 @@
                 <td>Role</td>
                 <td></td>
                 <td>
-                    <select id="role" name="role">
-                        <option value="1">User</option>
-                        <option value="2">Admin</option>
-                    </select>
+                    <select id="role" name="role" style="width: 80px;">
+                            <option value="1" <?php if(isset($this->role1))echo $this->role1;?>>User</option>
+                            <option value="2" <?php if(isset($this->role2))echo $this->role2;?>>Admin</option>
+                        </select>
                 </td>
             </tr>
             <tr>
@@ -52,7 +52,7 @@
             <tr>
                 <td></td>
                 <td></td>
-                <td><input type="submit" id="btnSubmit" name="btnSubmit" value="Thêm mới" /> <input type="reset" id="btnReset" name="btnReset" value="Xóa" /></td>
+                <td><input onclick="javascript:showMessage();" type="submit" id="btnSubmit" name="btnSubmit" value="Thêm mới" /> <input type="reset" id="btnReset" name="btnReset" value="Xóa" /></td>
             </tr>
         </table>
     </div>

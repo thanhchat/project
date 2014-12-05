@@ -17,19 +17,12 @@ class IndexController extends System_Controller_Action
     {
         $dbcache=$this->getInvokeArg('bootstrap')->getResource('cachemanager')->getCache('dbcache');
         $id='list_cache';
-        if(!$dbcache->load($id)){
-            $muser=new Default_Model_User;
-            $data=$muser->getCustomerLimit(20);
-            $dbcache->save($data,$id);     
-        }
-        $this->view->array=$dbcache->load($id);
-        $id_cache_menu='cache_item_menu';
-        if(!$dbcache->load($id_cache_menu)){
-            $menuItems=new Default_Model_MenuItem;
-            $data=$menuItems->getListMenuItem();
-            $dbcache->save($data,$id_cache_menu);
-        }
-        $this->view->arrayMenuItems=$dbcache->load($id_cache_menu);
+//        if(!$dbcache->load($id)){
+//            $muser=new Default_Model_User;
+//            $data=$muser->getCustomerLimit(20);
+//            $dbcache->save($data,$id);     
+//        }
+//        $this->view->array=$dbcache->load($id);
         
        // $this->view->headScript()->appendFile($this->view->baseUrl().'/public/includes/ckeditor/ckeditor.js');
         // if the form is submitted
