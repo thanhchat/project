@@ -51,74 +51,78 @@ class Portal_AlbumController extends System_Controller_Action {
             $img = strip_tags($_FILES['image']['tmp_name']);
             if ($empty->isValid(trim($albumName))) {
                 if (isset($_FILES['image']['name']) && !empty($_FILES['image']['name'])) {
-                    if ($empty->isValid(trim($image_folder))) {
-                        $objFunction = new System_Function;
-                        $image_folder = $objFunction->pareString($image_folder);
-                        $auth = Zend_Auth::getInstance();
-                        $i = 0;
-                        if ($objFunction->createFolder($image_folder, "public/images/")) {
-                            if ($objFunction->createFolder("medium", "public/images/" . $image_folder . "/") && $objFunction->createFolder("original", "public/images/" . $image_folder . "/")) {
-                                $i = 1;
+                    if ($this->checkImage($imageName)) {
+                        if ($empty->isValid(trim($image_folder))) {
+                            $objFunction = new System_Function;
+                            $image_folder = $objFunction->pareString($image_folder);
+                            $auth = Zend_Auth::getInstance();
+                            $i = 0;
+                            if ($objFunction->createFolder($image_folder, "public/images/")) {
+                                if ($objFunction->createFolder("medium", "public/images/" . $image_folder . "/") && $objFunction->createFolder("original", "public/images/" . $image_folder . "/")) {
+                                    $i = 1;
+                                }
+                            } else {
+                                $this->view->errorMessage = "Thư mục trùng hoặc tạo không thành công";
                             }
-                        } else {
-                            $this->view->errorMessage = "Thư mục trùng hoặc tạo không thành công";
-                        }
-                        if ($i == 1) {
-                            //header('Content-Type: image/jpeg'); 
+                            if ($i == 1) {
+                                //header('Content-Type: image/jpeg'); 
 //                            $i = strrpos($imageName, ".");
 //                            $l = strlen($imageName) - $i;
 //                            $ext = substr($imageName, $i + 1, $l);
-                            $resize = new System_ResizeImageClass($img);
-                            if ($_FILES['image']['size'] <= FILE_MAX) {
-                                if ($resize != "error") {
-                                    $resize->resizeTo(300, 300);
-                                    $resize->saveImage('public/images/' . $image_folder . "/medium/" . $imageName);
-                                    $resize->resizeTo(500, 500);
-                                    $resize->saveImage('public/images/' . $image_folder . "/original/" . $imageName);
+                                $resize = new System_ResizeImageClass($img);
+                                if ($_FILES['image']['size'] <= FILE_MAX) {
+                                    if ($resize != "error") {
+                                        $resize->resizeTo(300, 300);
+                                        $resize->saveImage('public/images/' . $image_folder . "/medium/" . $imageName);
+                                        $resize->resizeTo(500, 500);
+                                        $resize->saveImage('public/images/' . $image_folder . "/original/" . $imageName);
 
-                                    $array = array('MENU_ITEM_ID' => $menuItemId, 'ALBUM_TITLE' => $albumName,
-                                        'ALBUM_DESCRIPT' => $description, 'ALBUM_CONTENT' => $contentDes, 'MEDIUM_IMAGE_URL' => $imageName,
-                                        'ORIGINAL_IMAGE_URL' => $imageName, 'ALBUM_FOLDER_NAME' => $image_folder, 'CREATED_BY_USER' => $auth->getIdentity()->USER_LOGIN_ID,
-                                        'IS_ACTIVE' => $active, 'VIEW' => 0, 'TAGS' => $tags, 'IMAGE_SOURCE' => $sources);
-                                    $objAlbum = new Portal_Model_Album();
-                                    $albumId = $objAlbum->addAlbum($array);
-                                    if (trim($tags) != "") {
-                                        $listTags = explode(';', $tags);
-                                        if (is_array($listTags) && count($listTags) > 0) {
-                                            $objTags = new Portal_Model_TagAlbum;
-                                            $objTagsAlbumValue = new Portal_Model_TagAlbumValue();
-                                            foreach ($listTags as $key => $value) {
-                                                $checkIsExist = $objTags->getTagsByName(trim($value));
-                                                $idTags = 0;
-                                                if (count($checkIsExist) > 0) {
-                                                    $idTags = $checkIsExist[0]['ID_TAG'];
-                                                } else {
-                                                    $arrayTagsName = array('TAG_NAME' => $value);
-                                                    $idTags = $objTags->addTagsValue($arrayTagsName);
+                                        $array = array('MENU_ITEM_ID' => $menuItemId, 'ALBUM_TITLE' => $albumName,
+                                            'ALBUM_DESCRIPT' => $description, 'ALBUM_CONTENT' => $contentDes, 'MEDIUM_IMAGE_URL' => $imageName,
+                                            'ORIGINAL_IMAGE_URL' => $imageName, 'ALBUM_FOLDER_NAME' => $image_folder, 'CREATED_BY_USER' => $auth->getIdentity()->USER_LOGIN_ID,
+                                            'IS_ACTIVE' => $active, 'VIEW' => 0, 'TAGS' => $tags, 'IMAGE_SOURCE' => $sources);
+                                        $objAlbum = new Portal_Model_Album();
+                                        $albumId = $objAlbum->addAlbum($array);
+                                        if (trim($tags) != "") {
+                                            $listTags = explode(';', $tags);
+                                            if (is_array($listTags) && count($listTags) > 0) {
+                                                $objTags = new Portal_Model_TagAlbum;
+                                                $objTagsAlbumValue = new Portal_Model_TagAlbumValue();
+                                                foreach ($listTags as $key => $value) {
+                                                    $checkIsExist = $objTags->getTagsByName(trim($value));
+                                                    $idTags = 0;
+                                                    if (count($checkIsExist) > 0) {
+                                                        $idTags = $checkIsExist[0]['ID_TAG'];
+                                                    } else {
+                                                        $arrayTagsName = array('TAG_NAME' => $value);
+                                                        $idTags = $objTags->addTagsValue($arrayTagsName);
+                                                    }
+
+                                                    $arrayTagValue = array('ALBUM_ID' => $albumId, 'TAG_VALUE_ID' => $idTags);
+                                                    $objTagsAlbumValue->addTagsAlbumValue($arrayTagValue);
                                                 }
-
-                                                $arrayTagValue = array('ALBUM_ID' => $albumId, 'TAG_VALUE_ID' => $idTags);
-                                                $objTagsAlbumValue->addTagsAlbumValue($arrayTagValue);
                                             }
                                         }
+                                        $this->view->successMessage = "Thêm album thành công";
+                                        $this->view->album_name = "";
+                                        $this->view->description = "";
+                                        $this->view->contentDes = "";
+                                        $this->view->active = 0;
+                                        $this->view->tags = "";
+                                        $this->view->sources = "";
+                                        $this->view->image_folder = "";
+                                    } else {
+                                        $this->view->errorMessage = "Upload bị lỗi hoặc file không đúng định dạng";
                                     }
-                                    $this->view->successMessage = "Thêm album thành công";
-                                    $this->view->album_name = "";
-                                    $this->view->description = "";
-                                    $this->view->contentDes = "";
-                                    $this->view->active = 0;
-                                    $this->view->tags = "";
-                                    $this->view->sources = "";
-                                    $this->view->image_folder = "";
                                 } else {
-                                    $this->view->errorMessage = "Upload bị lỗi hoặc file không đúng định dạng";
+                                    $this->view->errorMessage = "File hình chọn quá lớn";
                                 }
-                            } else {
-                                $this->view->errorMessage = "File hình chọn quá lớn";
                             }
+                        } else {
+                            $this->view->errorMessage = "Tên thư mục hình không được bỏ trống";
                         }
                     } else {
-                        $this->view->errorMessage = "Tên thư mục hình không được bỏ trống";
+                        $this->view->errorMessage = "Hình không đúng định dạng";
                     }
                 } else {
                     $this->view->errorMessage = "Vui lòng chọn hình để upload";
@@ -187,26 +191,31 @@ class Portal_AlbumController extends System_Controller_Action {
             $img = strip_tags($_FILES['image']['tmp_name']);
             if ($empty->isValid(trim($albumName))) {
                 $i = 0;
+                // if ($this->checkImage($imageName)) {
                 if (isset($_FILES['image']['name']) && !empty($_FILES['image']['name'])) {
-                    $resize = new System_ResizeImageClass($img);
-                    if ($_FILES['image']['size'] <= FILE_MAX) {
-                        if ($resize != "error") {
-                            $resize->resizeTo(300, 300);
-                            $resize->saveImage('public/images/' . $image_folder . "/medium/" . $imageName);
-                            $resize->resizeTo(500, 500);
-                            $resize->saveImage('public/images/' . $image_folder . "/original/" . $imageName);
-                            if (file_exists('public/images/' . $image_folder . "/medium/" . $album[0]['MEDIUM_IMAGE_URL'])) {
-                                unlink('public/images/' . $image_folder . "/medium/" . $album[0]['MEDIUM_IMAGE_URL']);
+                    if ($this->checkImage($imageName)) {
+                        $resize = new System_ResizeImageClass($img);
+                        if ($_FILES['image']['size'] <= FILE_MAX) {
+                            if ($resize != "error") {
+                                $resize->resizeTo(300, 300);
+                                $resize->saveImage('public/images/' . $image_folder . "/medium/" . $imageName);
+                                $resize->resizeTo(500, 500);
+                                $resize->saveImage('public/images/' . $image_folder . "/original/" . $imageName);
+                                if (file_exists('public/images/' . $image_folder . "/medium/" . $album[0]['MEDIUM_IMAGE_URL'])) {
+                                    unlink('public/images/' . $image_folder . "/medium/" . $album[0]['MEDIUM_IMAGE_URL']);
+                                }
+                                if (file_exists('public/images/' . $image_folder . "/original/" . $album[0]['ORIGINAL_IMAGE_URL'])) {
+                                    unlink('public/images/' . $image_folder . "/original/" . $album[0]['ORIGINAL_IMAGE_URL']);
+                                }
+                                $i = 1;
+                            } else {
+                                $this->view->errorMessage = "Upload bị lỗi hoặc file không đúng định dạng";
                             }
-                            if (file_exists('public/images/' . $image_folder . "/original/" . $album[0]['ORIGINAL_IMAGE_URL'])) {
-                                unlink('public/images/' . $image_folder . "/original/" . $album[0]['ORIGINAL_IMAGE_URL']);
-                            }
-                            $i = 1;
                         } else {
-                            $this->view->errorMessage = "Upload bị lỗi hoặc file không đúng định dạng";
+                            $this->view->errorMessage = "File hình chọn quá lớn";
                         }
                     } else {
-                        $this->view->errorMessage = "File hình chọn quá lớn";
+                        $this->view->errorMessage = "Hình không đúng định dạng";
                     }
                 }
                 $array = array();
@@ -285,6 +294,8 @@ class Portal_AlbumController extends System_Controller_Action {
         $this->view->id = $idAlbum;
         $objAlbum = new Portal_Model_Album;
         $this->view->listAlbum = $objAlbum->getListAblum();
+        $messError=array();
+        $messSucc=array();
         if ($this->_request->isPost() && $idAlbum > 0) {
             if (isset($_FILES['file_uploads_with_title']) && !empty($_FILES["file_uploads_with_title"]['name'][0])) {
                 $userSession = Zend_Auth::getInstance();
@@ -297,32 +308,34 @@ class Portal_AlbumController extends System_Controller_Action {
                     if ($_FILES["file_uploads_with_title"]["error"][$i] > 0) {
                         $messError[] = "Lỗi : " . $_FILES["file_uploads_with_title"]["name"][$i] . "<br>";
                     } else {
-                        $img = strip_tags($_FILES["file_uploads_with_title"]["tmp_name"][$i]);
-                        $imageName = $_FILES["file_uploads_with_title"]["name"][$i];
-                        if ($_FILES['file_uploads_with_title']['size'][$i] <= FILE_MAX) {
-                            $resize = new System_ResizeImageClass($img);
-                            if ($resize != "error") {
-                                $resize->resizeTo(75, 75, 'exact');
-                                $resize->saveImage('public/images/' . $nameFolder[0] . "/medium/" . $imageName);
-                                $resize->resizeTo(502, 502);
-                                $resize->saveImage('public/images/' . $nameFolder[0] . "/original/" . $imageName);
-                                $title = $this->_request->getPost('title' . ($i + 1));
-                                $active = ($this->_request->getPost('chk' . ($i + 1))) ? 1 : 0;
-                                $data = array('ALBUM_ID' => $nameFolder[1], 'DESCRIPT' => $title, 'SMALL_IMAGE_URL' => $imageName, 'ORIGINAL_IMAGE_URL' => $imageName, 'IS_ACTIVE' => $active, 'CREATED_BY_USER' => $idUser);
-                                $objImageValue->addImage($data);
-                                $messSucc[] = "Success : " . $_FILES["file_uploads_with_title"]["name"][$i] . "<br>";
+                        if ($this->checkImage($_FILES["file_uploads_with_title"]["name"][$i])) {
+                            $img = strip_tags($_FILES["file_uploads_with_title"]["tmp_name"][$i]);
+                            $imageName = $_FILES["file_uploads_with_title"]["name"][$i];
+                            if ($_FILES['file_uploads_with_title']['size'][$i] <= FILE_MAX) {
+                                $resize = new System_ResizeImageClass($img);
+                                if ($resize != "error") {
+                                    $resize->resizeTo(75, 75, 'exact');
+                                    $resize->saveImage('public/images/' . $nameFolder[0] . "/medium/" . $imageName);
+                                    $resize->resizeTo(502, 502);
+                                    $resize->saveImage('public/images/' . $nameFolder[0] . "/original/" . $imageName);
+                                    $title = $this->_request->getPost('title' . ($i + 1));
+                                    $active = ($this->_request->getPost('chk' . ($i + 1))) ? 1 : 0;
+                                    $data = array('ALBUM_ID' => $nameFolder[1], 'DESCRIPT' => $title, 'SMALL_IMAGE_URL' => $imageName, 'ORIGINAL_IMAGE_URL' => $imageName, 'IS_ACTIVE' => $active, 'CREATED_BY_USER' => $idUser);
+                                    $objImageValue->addImage($data);
+                                    $messSucc[] = "Success : " . $_FILES["file_uploads_with_title"]["name"][$i] . "<br>";
+                                } else {
+                                    $messError[] = "Lỗi upoad file : " . $_FILES["file_uploads_with_title"]["name"][$i];
+                                }
                             } else {
-                                $messError[] = "Lỗi upoad file : " . $_FILES["file_uploads_with_title"]["name"][$i];
+                                $messError[] = "File : " . $_FILES["file_uploads_with_title"]["name"][$i] . " quá lớn";
                             }
                         } else {
-                            $messError[] = "File : " . $_FILES["file_uploads_with_title"]["name"][$i] . " quá lớn";
+                            $messError[] = "File : " . $_FILES["file_uploads_with_title"]["name"][$i] . " không đúng định dạng.";
                         }
                     }
                     $_FILES["file_uploads_with_title"]["name"][$i] = "";
                 }
-            } else {
-                $this->view->errorMessage = "Chọn file uploads";
-            }
+            } 
             if (isset($_FILES['file_uploads_not_title']) && !empty($_FILES["file_uploads_not_title"]['name'][0])) {
                 $userSession = Zend_Auth::getInstance();
                 $objImageValue = new Portal_Model_ImageAlbum;
@@ -335,29 +348,31 @@ class Portal_AlbumController extends System_Controller_Action {
                     } else {
                         $img = strip_tags($_FILES["file_uploads_not_title"]["tmp_name"][$f]);
                         $imageName = $_FILES["file_uploads_not_title"]["name"][$f];
-                        if ($_FILES['file_uploads_not_title']['size'][$f] <= FILE_MAX) {
-                            $resize = new System_ResizeImageClass($img);
-                            if ($resize != "error") {
-                                $resize->resizeTo(75, 75, 'exact');
-                                $resize->saveImage('public/images/' . $nameFolder[0] . "/medium/" . $imageName);
-                                $resize->resizeTo(502, 502);
-                                $resize->saveImage('public/images/' . $nameFolder[0] . "/original/" . $imageName);
-                                $active = 0;
-                                $data = array('ALBUM_ID' => $nameFolder[1], 'SMALL_IMAGE_URL' => $imageName, 'ORIGINAL_IMAGE_URL' => $imageName, 'IS_ACTIVE' => $active, 'CREATED_BY_USER' => $idUser);
-                                $objImageValue->addImage($data);
-                                $messSucc[] = "Success : " . $_FILES["file_uploads_not_title"]["name"][$f] . "<br>";
+                        if ($this->checkImage($imageName)) {
+                            if ($_FILES['file_uploads_not_title']['size'][$f] <= FILE_MAX) {
+                                $resize = new System_ResizeImageClass($img);
+                                if ($resize != "error") {
+                                    $resize->resizeTo(75, 75, 'exact');
+                                    $resize->saveImage('public/images/' . $nameFolder[0] . "/medium/" . $imageName);
+                                    $resize->resizeTo(502, 502);
+                                    $resize->saveImage('public/images/' . $nameFolder[0] . "/original/" . $imageName);
+                                    $active = 0;
+                                    $data = array('ALBUM_ID' => $nameFolder[1], 'SMALL_IMAGE_URL' => $imageName, 'ORIGINAL_IMAGE_URL' => $imageName, 'IS_ACTIVE' => $active, 'CREATED_BY_USER' => $idUser);
+                                    $objImageValue->addImage($data);
+                                    $messSucc[] = "Success : " . $_FILES["file_uploads_not_title"]["name"][$f] . "<br>";
+                                } else {
+                                    $messError[] = "Lỗi upoad file : " . $_FILES["file_uploads_not_title"]["name"][$f];
+                                }
                             } else {
-                                $messError[] = "Lỗi upoad file : " . $_FILES["file_uploads_not_title"]["name"][$f];
+                                $messError[] = "File : " . $_FILES["file_uploads_not_title"]["name"][$f] . " quá lớn";
                             }
-                        } else {
-                            $messError[] = "File : " . $_FILES["file_uploads_not_title"]["name"][$f] . " quá lớn";
+                        }else{
+                            $messError[] = "File : " . $_FILES["file_uploads_not_title"]["name"][$f] . " không đúng định dạng.";
                         }
                     }
                     $_FILES["file_uploads_not_title"]["name"][$f] = "";
                 }
-            } else {
-                $this->view->errorMessage = "Chọn file uploads";
-            }
+            } 
             if (isset($messSucc) && count($messSucc) > 0) {
                 $objMess = new System_Message;
                 $this->view->successMessage = $objMess->addMessage($messSucc);
@@ -367,6 +382,14 @@ class Portal_AlbumController extends System_Controller_Action {
                 $this->view->errorMessage = $objMess->addMessage($messError);
             }
         }
+    }
+
+    public function checkImage($image) {
+        $valid_formats = array("jpg", "JPG", "png", "PNG", "gif", "GIF", "jpeg", "JPEG", "bmp", "BMP");
+        if (!in_array(pathinfo($image, PATHINFO_EXTENSION), $valid_formats))
+            return FALSE;
+        else
+            return TRUE;
     }
 
 }

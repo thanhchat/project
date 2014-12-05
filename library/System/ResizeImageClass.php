@@ -83,8 +83,8 @@ class System_ResizeImageClass {
            
         }
 
-        $this->origWidth = imagesx($this->image);
-        $this->origHeight = imagesy($this->image);
+        $this->origWidth = @imagesx($this->image);
+        $this->origHeight = @imagesy($this->image);
     }
 
     /**
